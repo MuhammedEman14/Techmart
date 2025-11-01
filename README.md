@@ -54,36 +54,52 @@ CREATE DATABASE techmart_db
 Edit the .env file with your configuration:
 
 Server Configuration
+
 PORT=5000
+
 NODE_ENV=development
+
 CORS_ORIGIN=http://localhost:3000
 
 Database Configuration
+
 DB_HOST=localhost
+
 DB_PORT=3306
+
 DB_NAME=techmart_db
+
 DB_USER=root
+
 DB_PASSWORD=your_mysql_password
 
 Business Rules
+
 REORDER_THRESHOLD=10
+
 MIN_TRANSACTION_AMOUNT=0.01
+
 MAX_TRANSACTION_AMOUNT=10000
 
 Analytics Configuration
+
 RUN_INITIAL_ANALYTICS=true
+
 CACHE_TTL_HOURS=24
 
 ### Frontend Configuration
 
 Edit the .env file:
+
 REACT_APP_API_URL=http://localhost:5000/api
 
 ### Run Database Migrations
 npm run migrate
+
 This creates all database tables with proper schema and relationships.
 ### Seed the Database
 npm run seed
+
 This imports the sample data from CSV files into your database.
 
 ### Calculate Initial Analytics
@@ -93,7 +109,12 @@ Run the endpoint /api/analytics/calculate-all for calculating analytics related 
 npm run verify
 
 This script checks that all components are properly configured and ready to run.
-then run npm start
+
+then run 
+
+npm start
+
+in both frontend and backend folders to start
 
 ### Method 2: Docker Based Installation
 
@@ -101,29 +122,44 @@ then run npm start
 docker-compose up -d
 
 This command will:
+
 Build the Docker images
+
 Start MySQL database
+
 Start the backend API server
+
 Start the frontend development server
 
 ### Initialize Database
 Access the backend container
+
 run:
+
 docker-compose exec backend sh
 
 Inside the container
+
 run:
+
 npm run generate-data
+
 npm run migrate
+
 npm run seed
 
 Exit container
+
 run:
+
 exit
 
 ### Access the Application
+
 Frontend: http://localhost:3000
+
 Backend API: http://localhost:5000
+
 API Health Check: http://localhost:5000/health
 
 
@@ -131,75 +167,116 @@ API Health Check: http://localhost:5000/health
 
 ### 1. Viewing Dashboard Overview
 Access the main dashboard at http://localhost:3000
+
 What you'll see:
 
 Total sales for the last 24 hours
+
 Transaction count
+
 Active customer count
+
 Average order value
+
 Sales trend chart
+
 Top 5 products by revenue
+
 Recent transactions feed
+
 Low stock alerts
 
 
 ### 2. Analyzing Customer Behavior
 Navigate to Analytics → Customer Analytics
+
 Step-by-step:
+
 Use the search box to find a customer (type name or email)
+
 Select a customer from the autocomplete results
+
 View comprehensive analytics:
+
 RFM Segment Badge - Customer classification (Champions, Loyal, etc.)
+
 RFM Score Breakdown - Recency (5), Frequency (4), Monetary (5) scores
+
 CLV Prediction - Estimated lifetime value: $24,000 (95% confidence)
+
 Churn Risk - Risk level: Medium (45/100) with specific indicators
+
 Recommendations - 5 personalized product suggestions
 
 Understanding RFM Scores:
+
 Recency (1-5): How recently did they purchase?
+
 5 = Within 7 days (Very Active)
+
 1 = 180+ days (Lost Customer)
 
 Frequency (1-5): How often do they purchase?
+
 5 = 13+ transactions (Very Frequent)
+
 1 = 1-2 transactions (Rare)
 
 Monetary (1-5): How much do they spend?
+
 5 = Top 20% spenders (High Value)
+
 1 = Bottom 20% spenders (Low Value)
 
 
 ### 3. Running A/B Tests
+
 Navigate to Analytics → A/B Tests
+
 Creating a Test:
 
 Click "Create New Test"
+
 Fill in test details:
 
 Test Name: "Recommendation Algorithm v2"
+
 Test Type: "Recommendation"
+
 Duration: 14 days
+
 Variant A (Control): Current algorithm (40/30/30 weights)
+
 Variant B (Experiment): New algorithm (50/25/25 weights)
 
 Click "Start Test"
+
 Monitoring Results:
 
 View conversion rates per variant
+
 Track revenue per variant
+
 Monitor statistical significance
+
 View lift percentage (B vs A)
 
 Completing a Test:
+
 After sufficient data (typically 100+ customers per variant):
 
 Click "View Results"
+
 Review metrics comparison
+
 Check confidence level (aim for 95%+)
+
 Implement winning variant if conclusive
 
 
 ### API Documentation
+
 For detailed api documentation you can run Swagger
+
 at http://localhost:5000/api-docs
 
