@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: techmart-backend
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      DB_HOST: host.docker.internal   # ← CRITICAL
+      DB_PORT: 3306
+      DB_NAME: techmart_db
+      DB_USER: root
+      CORS_ORIGIN: http://localhost:3000
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    # Linux only:
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: techmart-frontend
+    environment:
+      REACT_APP_API_URL: /api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+networks:
+  techmart-network:
+    driver: bridge
