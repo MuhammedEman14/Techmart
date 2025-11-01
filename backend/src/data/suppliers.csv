@@ -1,0 +1,51 @@
+id,name,contact_email,phone,address,country,reliability_score,average_delivery_days,payment_terms,established_date,certification
+1,Apple Inc.,wholesale@appleinc.com,+1-210-343-3218x1960,"386 Shane Harbors, Port Lindachester, MA 36922",CapeVerde,0.98,5,Net 30,1985-02-09,"ISO 9001, ISO 14001"
+2,Samsung Electronics,wholesale@samsungelectronics.com,001-851-316-1559x40781,"310 Kendra Common Apt. 164, Reidstad, GA 49021",Guinea,0.95,4,Net 60,1984-11-06,"ISO 9001, ISO 27001"
+3,Microsoft Corporation,wholesale@microsoftcorporation.com,719-228-3276x483,"6413 Lewis Parks, Wilkersonmouth, FL 35219",Burundi,0.94,6,Net 45,1986-07-09,"ISO 9001, ISO 27001"
+4,Sony Corporation,wholesale@sonycorporation.com,+1-484-996-9653,"22691 James Mountain, Tashatown, TX 94967",Brazil,0.89,8,Net 30,2006-02-04,"ISO 9001, ISO 14001"
+5,Dell Technologies,wholesale@delltechnologies.com,+1-645-414-6270,"489 Eric Track, New Stephanie, NC 00575",NetherlandsAntilles,0.92,4,Prepaid,1990-01-03,"ISO 9001, ISO 14001"
+6,HP Inc.,wholesale@hpinc.com,3159430391,"78248 Brandt Plains, Lake Larry, TN 85681",HolySee(VaticanCityState),0.88,4,Net 30,1995-02-19,"ISO 9001, ISO 14001"
+7,Lenovo Group,wholesale@lenovogroup.com,371.233.1509x83930,"1834 Lewis Curve, Sanchezfort, AS 53855",Comoros,0.86,8,Net 45,1979-09-01,"ISO 9001, ISO 27001"
+8,ASUS,wholesale@asus.com,+1-565-966-7010x65133,"7317 Brent Plains, North Sarabury, GA 53770",LibyanArabJamahiriya,0.87,6,Net 30,1997-01-30,"ISO 9001, ISO 27001"
+9,Acer Inc.,wholesale@acerinc.com,(502)660-6474x6872,"805 Brendan Neck, North Susan, CO 24857",Bangladesh,0.82,4,Prepaid,2002-03-13,"ISO 9001, ISO 27001"
+10,LG Electronics,wholesale@lgelectronics.com,+1-736-619-3990x91699,"46247 Hickman Cliffs Apt. 799, North Amandahaven, KS 17862",Venezuela,0.84,6,Prepaid,1991-02-15,"ISO 9001, OHSAS 18001"
+11,Nvidia Corporation,wholesale@nvidiacorporation.com,235-642-7849,"USS Mcmillan, FPO AE 35165",Brazil,0.93,4,Net 30,2015-06-16,"ISO 9001, ISO 27001"
+12,AMD,wholesale@amd.com,001-282-344-9353x4874,"05242 Arnold Meadow Apt. 112, Port Mikeside, FL 56834",BruneiDarussalam,0.9,4,Prepaid,1977-04-21,"ISO 9001, OHSAS 18001"
+13,Intel Corporation,wholesale@intelcorporation.com,(405)433-1586x923,"56342 Patrick Camp, Walkermouth, MI 40502",Swaziland,0.95,5,Net 60,2011-03-18,"ISO 9001, ISO 27001"
+14,Logitech,wholesale@logitech.com,730.836.5414,"14294 Daniel Mews Suite 569, South Rachelborough, KS 06318",RussianFederation,0.85,1,Net 45,1995-01-16,"ISO 9001, OHSAS 18001"
+15,Razer Inc.,wholesale@razerinc.com,783.856.1595x14846,"66299 Sullivan Village, West Justinchester, WY 76520",NewCaledonia,0.81,1,Net 30,2004-11-18,"ISO 9001, ISO 14001"
+16,Ramos-Lowe,yleon@example.net,(514)589-5134,"79176 Jennifer Lights, Rossberg, SD 90629",Albania,0.79,5,Net 45,2021-04-22,ISO 9001
+17,Osborne and Sons,lindadominguez@example.com,7839172788,"727 Green Gateway Suite 873, Scottport, IA 36115",Grenada,0.94,3,Net 45,2004-09-09,None
+18,"Miller, Hernandez and Reyes",jasminebrown@example.com,787-660-3669x09670,"893 Robinson Mews Suite 065, Ramseymouth, PW 17229",Nigeria,0.88,7,Net 30,2010-11-28,ISO 9001
+19,Vargas-Alvarado,dayderek@example.com,(804)665-3755,"1708 Zoe Keys Apt. 100, East Mary, RI 20474",DominicanRepublic,0.92,4,Net 45,1999-01-29,None
+20,"Wilson, Gould and Marshall",katie29@example.net,001-512-341-9049x6631,"919 Michael Meadow Suite 185, Port Robertfort, CT 57323",Guyana,0.79,2,Net 60,2013-11-07,ISO 9001
+21,Zimmerman-Graham,christina87@example.com,(294)953-1473x79965,"3545 Beard Squares, Angelahaven, ID 11722",DominicanRepublic,0.74,11,Net 60,2016-04-20,None
+22,Peters-Allen,fbrewer@example.com,9147363495,"7444 David Fields Suite 182, East Joanna, KY 95473",Namibia,0.86,6,Net 60,2023-09-28,ISO 9001
+23,"Carlson, Hooper and Wall",jeremy24@example.org,001-682-940-0842x710,"04711 Vasquez Ports Apt. 229, Christopherbury, DE 73648",Serbia,0.71,7,Net 45,2007-06-28,
+24,"Gibbs, Perez and Mills",tkerr@example.net,(349)490-9133x41232,"974 Jesse Squares Suite 713, Kristinshire, TN 26429",Jamaica,0.84,2,Net 60,1998-09-30,
+25,Holland LLC,charlesmartin@example.com,+1-994-371-7464x887,"594 Christopher Spring Apt. 490, South April, NV 36959",Cocos(Keeling)Islands,0.86,5,Net 30,2024-04-30,None
+26,Walters-Vasquez,harrisonricky@example.com,+1-712-356-7468x07154,"Unit 6808 Box 7603, DPO AP 47920",Nigeria,0.81,7,Net 60,2017-05-10,"ISO 9001, ISO 14001"
+27,"Ramos, Williams and Adams",sarakim@example.net,310.993.2480x8613,"USNS Jimenez, FPO AP 38755",Malawi,0.72,3,Net 30,2015-11-16,"ISO 9001, ISO 14001"
+28,Davenport-Baird,stephenthomas@example.org,+1-982-414-6584x044,"5886 Cantu Ways Apt. 396, Port Kimberly, AZ 42205",Samoa,0.81,8,Net 30,2009-02-18,
+29,Hughes-Alvarado,tylerjohnson@example.net,001-851-471-8702,"9615 Finley Road Suite 809, East Crystalport, IN 98381",Bermuda,0.94,5,Net 30,2008-01-02,None
+30,Hodges Ltd,wallaceheather@example.org,8504455623,"693 Durham Divide, South Dana, NH 33967",PapuaNewGuinea,0.79,6,Net 45,1995-09-10,None
+31,Santana-Byrd,charleslandry@example.net,664-674-3671x3695,"0909 Wall Heights Apt. 953, New John, WV 94994",Seychelles,0.89,5,Net 60,2014-07-15,None
+32,Fuller Ltd,parkerscott@example.net,(621)445-6232x858,"5171 Karen Fork Suite 851, Smithside, DE 60110",HeardIslandandMcDonaldIslands,0.83,12,Net 30,2014-12-06,ISO 9001
+33,"Baker, James and Little",daniel37@example.org,+1-285-693-1746x120,"Unit 1138 Box 2675, DPO AP 97905",Qatar,0.82,6,Net 30,2022-11-07,None
+34,Matthews-Barber,fpena@example.net,(840)653-7735x15850,"1390 Kristin Gardens, Port Anne, CA 73142",Coted'Ivoire,0.76,3,Net 60,2012-06-03,
+35,Murphy and Sons,ramireztracey@example.org,+1-742-210-2053,"68117 Strickland Passage, South Williamton, VA 86864",Mali,0.72,9,Net 60,2004-03-01,
+36,"Maynard, Brown and Mendoza",gsimmons@example.com,001-771-815-9212x499,"Unit 8478 Box 9611, DPO AP 85817",Turkey,0.74,3,Net 60,2017-09-19,"ISO 9001, ISO 14001"
+37,"Glenn, Jordan and Beasley",dmorgan@example.com,(315)765-4527x11116,"885 Robert Well, Parrishton, LA 79197",Georgia,0.89,7,Net 60,2005-08-13,None
+38,"Romero, Moore and Olson",bellangela@example.org,001-649-636-8998x09402,"PSC 5022, Box 9612, APO AP 83492",Antarctica(theterritorySouthof60degS),0.83,1,Net 30,1998-01-29,
+39,"Lewis, Barnes and Peterson Electronics",larry59@example.net,802-929-0147,"3815 Rodriguez Springs Suite 840, South Tracey, AR 01508",CostaRica,0.47,33,Prepaid Only,2004-02-28,
+40,Saunders LLC,mark07@example.net,(922)368-3885x16060,"664 Richard Islands Apt. 975, South Meganbury, NE 77685",Iran,0.76,3,Net 30,2010-08-12,ISO 9001
+41,Harrell-Reese,masonjackson@example.net,+1-418-483-5523x1243,"77997 Lin Road, Edwardland, NJ 58462",NorfolkIsland,0.87,7,Net 30,2004-03-14,ISO 9001
+42,Vargas-Bell,collinsshannon@example.org,(941)519-9867x980,"207 Lisa Villages Suite 182, East Jasminemouth, NC 69018",NewZealand,0.82,9,Net 45,2000-01-09,
+43,Hardin-Hughes,erika05@example.org,818-464-4925x19254,"8652 Debbie Manors, Andrewport, HI 28575",Guam,0.81,7,Net 45,2022-11-25,ISO 9001
+44,Lee-Cooke,chrisrichard@example.org,988.205.9296x22292,"9473 Kyle Valleys, Mckeeborough, MN 89408",Yemen,0.86,6,Net 30,2011-12-17,ISO 9001
+45,Murray-Campbell,ashaw@example.org,392.640.7581,"7826 Stacey Forges, Wilkersontown, MT 07481",Indonesia,0.75,6,Net 45,2009-12-23,ISO 9001
+46,Hughes Inc,jeffrey51@example.net,+1-252-620-4727x7901,"986 Kimberly Freeway, Davidbury, MT 84249",SouthAfrica,0.93,2,Net 45,2013-06-24,ISO 9001
+47,Rodriguez Group Electronics,chenbailey@example.net,,"95396 Elizabeth Corner Suite 188, South Morganton, SC 51210",HolySee(VaticanCityState),0.6,41,Prepaid Only,2002-10-10,ISO 9001
+48,Kelly Inc,john19@example.net,001-252-605-8527x72217,"54868 King Terrace, West Michael, WI 06766",Tonga,0.76,4,Net 45,2014-06-08,ISO 9001
+49,Martinez-Richardson,ypaul@example.com,(877)458-4161,"15447 Jackson Mills Suite 705, Hillton, CA 88474",NorthernMariana Islands,0.74,5,Net 30,2007-03-14,ISO 9001
+50,"Owen, Shelton and Cisneros",melindagregory@example.com,4219355690,"USNV Wallace, FPO AE 75726",Burundi,0.87,10,Net 60,2010-10-10,ISO 9001

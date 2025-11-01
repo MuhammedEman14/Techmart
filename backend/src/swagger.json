@@ -1,0 +1,3237 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "TechMart API",
+    "description": "Comprehensive API for TechMart retail analytics platform.\n\nFeatures include:\n- Customer analytics (RFM, CLV, Churn prediction)\n- Transaction management and fraud detection\n- Inventory management\n- A/B testing\n- Business alerts\n- Real-time dashboards\n- Product recommendations\n",
+    "version": "1.0.0",
+    "contact": {
+      "name": "TechMart API Support",
+      "email": "support@techmart.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Development server"
+    },
+    {
+      "url": "https://api.techmart.com/api",
+      "description": "Production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Dashboard",
+      "description": "Dashboard overview and statistics"
+    },
+    {
+      "name": "Transactions",
+      "description": "Transaction management and operations"
+    },
+    {
+      "name": "Inventory",
+      "description": "Inventory and stock management"
+    },
+    {
+      "name": "Analytics",
+      "description": "Sales and reporting analytics"
+    },
+    {
+      "name": "Customer Analytics",
+      "description": "Customer behavior analytics (RFM, CLV, Churn)"
+    },
+    {
+      "name": "Customers",
+      "description": "Customer data and search"
+    },
+    {
+      "name": "Recommendations",
+      "description": "Product recommendations and cross-selling"
+    },
+    {
+      "name": "Alerts",
+      "description": "Business alerts management"
+    },
+    {
+      "name": "A/B Tests",
+      "description": "A/B testing management"
+    },
+    {
+      "name": "Cache",
+      "description": "Cache management operations"
+    }
+  ],
+  "paths": {
+    "/dashboard/overview": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get dashboard overview",
+        "description": "Returns overview statistics for the specified time period (default last 24 hours)",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Start date for filtering (ISO 8601 format)",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "example": "2024-01-01T00:00:00Z"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "End date for filtering (ISO 8601 format)",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "example": "2024-12-31T23:59:59Z"
+          },
+          {
+            "name": "hours",
+            "in": "query",
+            "description": "Number of hours to look back",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "example": 24
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dashboard overview retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardOverviewResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get all transactions",
+        "description": "Retrieve transactions with optional filters. If no dates provided, returns all transactions.",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Filter transactions from this date",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "Filter transactions until this date",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by transaction status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "completed",
+                "failed",
+                "refunded"
+              ]
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter by transaction type",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "segment",
+            "in": "query",
+            "description": "Get specific customer segment",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "highest_spenders",
+                "frequent_buyers"
+              ]
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of results per page",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transactions retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Create new transaction",
+        "description": "Create a new transaction record",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Transaction created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/{id}": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get transaction by ID",
+        "description": "Retrieve detailed information about a specific transaction",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Transaction ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Transaction not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/suspicious": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get suspicious transactions",
+        "description": "Detect potentially fraudulent transactions based on risk score",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of results",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "description": "Number of days to look back",
+            "schema": {
+              "type": "integer",
+              "default": 30,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "minRiskScore",
+            "in": "query",
+            "description": "Minimum risk score threshold (0-100)",
+            "schema": {
+              "type": "number",
+              "format": "float",
+              "default": 70,
+              "minimum": 0,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "fraud_type",
+            "in": "query",
+            "description": "Type of fraud to filter",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "unusual_amount",
+                "rapid_purchase"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Suspicious transactions retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuspiciousTransactionsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventory/low-stock": {
+      "get": {
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Get low stock products",
+        "description": "Retrieve products below reorder threshold",
+        "parameters": [
+          {
+            "name": "threshold",
+            "in": "query",
+            "description": "Custom stock threshold",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Filter by product category",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Low stock products retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LowStockResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventory/value": {
+      "get": {
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Get inventory value",
+        "description": "Get total inventory value breakdown by category",
+        "responses": {
+          "200": {
+            "description": "Inventory value retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryValueResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventory/stock/{productId}": {
+      "put": {
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Update product stock",
+        "description": "Update stock quantity for a product",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "description": "Product ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "quantity",
+                  "operation"
+                ],
+                "properties": {
+                  "quantity": {
+                    "type": "integer",
+                    "description": "Quantity to add or subtract",
+                    "example": 50
+                  },
+                  "operation": {
+                    "type": "string",
+                    "enum": [
+                      "add",
+                      "subtract",
+                      "set"
+                    ],
+                    "description": "Operation to perform",
+                    "example": "add"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Stock updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StockUpdateResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventory/products/categories": {
+      "get": {
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Get product categories",
+        "description": "Retrieve list of all distinct product categories",
+        "responses": {
+          "200": {
+            "description": "Categories retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Fetched product categories successfully"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "Electronics",
+                        "Clothing",
+                        "Home & Garden"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inventory/products/category/{categoryName}": {
+      "get": {
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Get products by category",
+        "description": "Retrieve all products in a specific category",
+        "parameters": [
+          {
+            "name": "categoryName",
+            "in": "path",
+            "required": true,
+            "description": "Category name",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Products retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Product"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No products found in category",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/hourly-sales": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "Get hourly sales data",
+        "description": "Retrieve sales data aggregated by time interval. Returns all-time data if no dates provided.",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Start date for filtering",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "End date for filtering",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "description": "Time interval for aggregation",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "hour",
+                "day",
+                "week",
+                "month"
+              ],
+              "default": "hour"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hourly sales data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HourlySalesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/category-sales": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "Get category sales breakdown",
+        "description": "Retrieve sales breakdown by product category",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Start date for filtering",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "End date for filtering",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of categories",
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category sales retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategorySalesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/dashboard": {
+      "get": {
+        "tags": [
+          "Customer Analytics"
+        ],
+        "summary": "Get analytics dashboard overview",
+        "description": "Comprehensive dashboard with segments, top customers, and metrics",
+        "responses": {
+          "200": {
+            "description": "Dashboard data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsDashboardResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/segments/overview": {
+      "get": {
+        "tags": [
+          "Customer Analytics"
+        ],
+        "summary": "Get customer segments overview",
+        "description": "Retrieve RFM segment distribution and statistics",
+        "responses": {
+          "200": {
+            "description": "Segments retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentOverviewResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/customer/{id}/complete": {
+      "get": {
+        "tags": [
+          "Customer Analytics"
+        ],
+        "summary": "Get complete customer analytics",
+        "description": "Get all analytics for a customer (RFM, CLV, Churn, Recommendations)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Customer ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Complete analytics retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompleteCustomerAnalyticsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/customer/{id}/rfm": {
+      "get": {
+        "tags": [
+          "Customer Analytics"
+        ],
+        "summary": "Get customer RFM analysis",
+        "description": "Retrieve Recency, Frequency, Monetary analysis for a customer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Customer ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "RFM analysis retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFMAnalysisResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/customer/{id}/clv": {
+      "get": {
+        "tags": [
+          "Customer Analytics"
+        ],
+        "summary": "Get customer CLV prediction",
+        "description": "Retrieve Customer Lifetime Value prediction",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Customer ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CLV prediction retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CLVAnalysisResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/customer/{id}/churn": {
+      "get": {
+        "tags": [
+          "Customer Analytics"
+        ],
+        "summary": "Get customer churn analysis",
+        "description": "Retrieve churn risk prediction and prevention strategies",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Customer ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Churn analysis retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChurnAnalysisResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/customers/top-clv": {
+      "get": {
+        "tags": [
+          "Customer Analytics"
+        ],
+        "summary": "Get top customers by CLV",
+        "description": "Retrieve customers with highest predicted lifetime value",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of customers to return",
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Top CLV customers retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TopCLVCustomersResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/customers/high-risk": {
+      "get": {
+        "tags": [
+          "Customer Analytics"
+        ],
+        "summary": "Get high-risk churn customers",
+        "description": "Retrieve customers at high risk of churning",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of customers to return",
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "High-risk customers retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HighRiskCustomersResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/calculate-all": {
+      "post": {
+        "tags": [
+          "Customer Analytics"
+        ],
+        "summary": "Trigger analytics calculation",
+        "description": "Manually trigger analytics calculation for all customers",
+        "responses": {
+          "200": {
+            "description": "Calculation triggered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Analytics calculation started"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/recommendations/{customerId}": {
+      "get": {
+        "tags": [
+          "Recommendations"
+        ],
+        "summary": "Get customer recommendations",
+        "description": "Get personalized product recommendations for a customer",
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "description": "Customer ID",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of recommendations",
+            "schema": {
+              "type": "integer",
+              "default": 5,
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recommendations retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendationsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/recommendations/product/{productId}/cross-sell": {
+      "get": {
+        "tags": [
+          "Recommendations"
+        ],
+        "summary": "Get product cross-sell recommendations",
+        "description": "Get products frequently bought together",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "description": "Product ID",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of recommendations",
+            "schema": {
+              "type": "integer",
+              "default": 5,
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cross-sell recommendations retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CrossSellResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customers": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Get all customers",
+        "description": "Retrieve customers with optional search and filters",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of results per page",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Number of records to skip",
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search by name or email",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loyalty_tier",
+            "in": "query",
+            "description": "Filter by loyalty tier",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "bronze",
+                "silver",
+                "gold",
+                "platinum"
+              ]
+            }
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "description": "Field to sort by",
+            "schema": {
+              "type": "string",
+              "default": "first_name",
+              "enum": [
+                "first_name",
+                "last_name",
+                "email",
+                "created_at"
+              ]
+            }
+          },
+          {
+            "name": "sort_order",
+            "in": "query",
+            "description": "Sort order",
+            "schema": {
+              "type": "string",
+              "default": "ASC",
+              "enum": [
+                "ASC",
+                "DESC"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customers retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customers/{id}": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Get customer by ID",
+        "description": "Retrieve detailed customer information with analytics",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Customer ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerDetailResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Customer not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customers/search/{query}": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Search customers",
+        "description": "Quick search customers by name or email",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "path",
+            "required": true,
+            "description": "Search query (minimum 2 characters)",
+            "schema": {
+              "type": "string",
+              "minLength": 2
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of results",
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerSearchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid search query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customers/autocomplete/{query}": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Autocomplete customer search",
+        "description": "Optimized autocomplete search (starts with query)",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "path",
+            "required": true,
+            "description": "Search query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of results",
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Autocomplete results retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerSearchResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customers/loyalty/{tier}": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Get customers by loyalty tier",
+        "description": "Retrieve customers filtered by loyalty tier",
+        "parameters": [
+          {
+            "name": "tier",
+            "in": "path",
+            "required": true,
+            "description": "Loyalty tier",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "bronze",
+                "silver",
+                "gold",
+                "platinum"
+              ]
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of results",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customers retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerLoyaltyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid loyalty tier",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/alerts": {
+      "get": {
+        "tags": [
+          "Alerts"
+        ],
+        "summary": "Get all alerts",
+        "description": "Retrieve alerts with optional filters",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by alert status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "active",
+                "acknowledged",
+                "resolved"
+              ]
+            }
+          },
+          {
+            "name": "severity",
+            "in": "query",
+            "description": "Filter by severity level",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high",
+                "critical"
+              ]
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter by alert type",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of alerts",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "minimum": 1,
+              "maximum": 1000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Alerts retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Alerts"
+        ],
+        "summary": "Create new alert",
+        "description": "Create a custom business alert",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlertCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Alert created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/alerts/{id}": {
+      "get": {
+        "tags": [
+          "Alerts"
+        ],
+        "summary": "Get alert by ID",
+        "description": "Retrieve detailed information about a specific alert",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Alert ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Alert retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Alert not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Alerts"
+        ],
+        "summary": "Delete alert",
+        "description": "Delete an alert by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Alert ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Alert deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Alert deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Alert not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/alerts/{id}/acknowledge": {
+      "patch": {
+        "tags": [
+          "Alerts"
+        ],
+        "summary": "Acknowledge alert",
+        "description": "Mark an alert as acknowledged",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Alert ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Alert acknowledged successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Alert not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ab-tests": {
+      "get": {
+        "tags": [
+          "A/B Tests"
+        ],
+        "summary": "Get all active A/B tests",
+        "description": "Retrieve all currently active A/B tests",
+        "responses": {
+          "200": {
+            "description": "A/B tests retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ABTestListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "A/B Tests"
+        ],
+        "summary": "Create new A/B test",
+        "description": "Create a new A/B test configuration",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ABTestCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "A/B test created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ABTestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ab-tests/{id}": {
+      "get": {
+        "tags": [
+          "A/B Tests"
+        ],
+        "summary": "Get A/B test by ID",
+        "description": "Retrieve detailed information about a specific test",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Test ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Test retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ABTestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ab-tests/{id}/results": {
+      "get": {
+        "tags": [
+          "A/B Tests"
+        ],
+        "summary": "Get test results",
+        "description": "Retrieve test results with statistical analysis",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Test ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Results retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ABTestResultsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ab-tests/{id}/assign/{customerId}": {
+      "post": {
+        "tags": [
+          "A/B Tests"
+        ],
+        "summary": "Assign customer to variant",
+        "description": "Assign a customer to a test variant",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Test ID",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "description": "Customer ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer assigned successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "test_id": {
+                          "type": "integer"
+                        },
+                        "customer_id": {
+                          "type": "integer"
+                        },
+                        "assigned_variant": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ab-tests/{id}/conversion": {
+      "post": {
+        "tags": [
+          "A/B Tests"
+        ],
+        "summary": "Track conversion",
+        "description": "Record a conversion event for a customer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Test ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "customer_id"
+                ],
+                "properties": {
+                  "customer_id": {
+                    "type": "integer",
+                    "description": "Customer ID"
+                  },
+                  "revenue": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Revenue amount (optional)",
+                    "default": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Conversion tracked successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Conversion tracked successfully"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ab-tests/{id}/engagement": {
+      "post": {
+        "tags": [
+          "A/B Tests"
+        ],
+        "summary": "Track engagement",
+        "description": "Record an engagement event for a customer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Test ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "customer_id",
+                  "engagement_score"
+                ],
+                "properties": {
+                  "customer_id": {
+                    "type": "integer",
+                    "description": "Customer ID"
+                  },
+                  "engagement_score": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Engagement score"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Engagement tracked successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Engagement tracked successfully"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ab-tests/{id}/complete": {
+      "post": {
+        "tags": [
+          "A/B Tests"
+        ],
+        "summary": "Complete A/B test",
+        "description": "Mark the test as complete and finalize results",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Test ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Test completed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Test completed successfully"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ab-tests/{id}/pause": {
+      "post": {
+        "tags": [
+          "A/B Tests"
+        ],
+        "summary": "Pause A/B test",
+        "description": "Temporarily pause an active test",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Test ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Test paused successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Test paused successfully"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ab-tests/{id}/resume": {
+      "post": {
+        "tags": [
+          "A/B Tests"
+        ],
+        "summary": "Resume A/B test",
+        "description": "Resume a paused test",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Test ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Test resumed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Test resumed successfully"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cache/stats": {
+      "get": {
+        "tags": [
+          "Cache"
+        ],
+        "summary": "Get cache statistics",
+        "description": "Retrieve cache performance statistics",
+        "responses": {
+          "200": {
+            "description": "Cache stats retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cache/clear": {
+      "delete": {
+        "tags": [
+          "Cache"
+        ],
+        "summary": "Clear cache",
+        "description": "Clear all cache or specific cache type",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Cache type to clear (leave empty for all)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cache cleared successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "All cache cleared"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cache/customer/{id}": {
+      "delete": {
+        "tags": [
+          "Cache"
+        ],
+        "summary": "Clear customer cache",
+        "description": "Clear cache for a specific customer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Customer ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer cache cleared successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Cache cleared for customer 123"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cache/clean": {
+      "post": {
+        "tags": [
+          "Cache"
+        ],
+        "summary": "Clean expired cache",
+        "description": "Remove expired cache entries",
+        "responses": {
+          "200": {
+            "description": "Expired cache cleaned successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Cleaned 42 expired cache entries"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Resource not found"
+              }
+            }
+          }
+        }
+      },
+      "DashboardOverviewResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "total_sales": {
+                "type": "number",
+                "format": "float"
+              },
+              "total_transactions": {
+                "type": "integer"
+              },
+              "average_order_value": {
+                "type": "number",
+                "format": "float"
+              },
+              "period": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "TransactionCreate": {
+        "type": "object",
+        "required": [
+          "customer_id",
+          "product_id",
+          "quantity",
+          "total_amount"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "product_id": {
+            "type": "integer",
+            "example": 42
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 2
+          },
+          "total_amount": {
+            "type": "number",
+            "format": "float",
+            "example": 199.99
+          },
+          "payment_method": {
+            "type": "string",
+            "example": "credit_card"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "completed",
+              "failed",
+              "refunded"
+            ],
+            "example": "completed"
+          }
+        }
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "customer_id": {
+            "type": "integer"
+          },
+          "product_id": {
+            "type": "integer"
+          },
+          "quantity": {
+            "type": "integer"
+          },
+          "total_amount": {
+            "type": "number",
+            "format": "float"
+          },
+          "payment_method": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "TransactionResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Transaction"
+          }
+        }
+      },
+      "TransactionListResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Transaction"
+            }
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer"
+              },
+              "page": {
+                "type": "integer"
+              },
+              "limit": {
+                "type": "integer"
+              },
+              "pages": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "SuspiciousTransactionsResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "transaction": {
+                  "$ref": "#/components/schemas/Transaction"
+                },
+                "risk_score": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "fraud_type": {
+                  "type": "string"
+                },
+                "reasons": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "format": "float"
+          },
+          "stock_quantity": {
+            "type": "integer"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number"
+          },
+          "dimensions": {
+            "type": "string"
+          },
+          "warranty_months": {
+            "type": "integer"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "LowStockResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "products": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              },
+              "count": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "InventoryValueResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "total_value": {
+                "type": "number",
+                "format": "float"
+              },
+              "by_category": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "category": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "number",
+                      "format": "float"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "StockUpdateResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "product_id": {
+                "type": "integer"
+              },
+              "previous_quantity": {
+                "type": "integer"
+              },
+              "new_quantity": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "HourlySalesResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "sales": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "transaction_count": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CategorySalesResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "category": {
+                  "type": "string"
+                },
+                "total_sales": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "transaction_count": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "AnalyticsDashboardResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "total_customers": {
+                "type": "integer"
+              },
+              "segments": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "top_clv_customers": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "high_risk_customers": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "metrics": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "SegmentOverviewResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "segments": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "segment": {
+                      "type": "string"
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "avg_rfm": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "total_customers": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "RFMAnalysisResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "recency_score": {
+                "type": "integer"
+              },
+              "frequency_score": {
+                "type": "integer"
+              },
+              "monetary_score": {
+                "type": "integer"
+              },
+              "rfm_score": {
+                "type": "integer"
+              },
+              "segment": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "CLVAnalysisResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "clv_predicted": {
+                "type": "number",
+                "format": "float"
+              },
+              "confidence_level": {
+                "type": "string"
+              },
+              "factors": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "ChurnAnalysisResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "churn_risk_score": {
+                "type": "number",
+                "format": "float"
+              },
+              "risk_level": {
+                "type": "string"
+              },
+              "churn_probability": {
+                "type": "number",
+                "format": "float"
+              },
+              "prevention_strategies": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CompleteCustomerAnalyticsResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "customer_id": {
+                "type": "integer"
+              },
+              "rfm": {
+                "type": "object"
+              },
+              "clv": {
+                "type": "object"
+              },
+              "churn": {
+                "type": "object"
+              },
+              "recommendations": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "TopCLVCustomersResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "customer_id": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "clv_predicted": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            }
+          }
+        }
+      },
+      "HighRiskCustomersResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "customer_id": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "churn_risk_score": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "risk_level": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "RecommendationsResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "integer"
+                },
+                "product_name": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "reason": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CrossSellResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "integer"
+                },
+                "product_name": {
+                  "type": "string"
+                },
+                "co_occurrence": {
+                  "type": "integer"
+                },
+                "confidence": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Customer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "loyalty_tier": {
+            "type": "string",
+            "enum": [
+              "bronze",
+              "silver",
+              "gold",
+              "platinum"
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CustomerListResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Customer"
+            }
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer"
+              },
+              "count": {
+                "type": "integer"
+              },
+              "limit": {
+                "type": "integer"
+              },
+              "offset": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "CustomerDetailResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Customer"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "analytics": {
+                    "type": "object"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "CustomerSearchResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Customer"
+            }
+          },
+          "count": {
+            "type": "integer"
+          }
+        }
+      },
+      "CustomerLoyaltyResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Customer"
+            }
+          },
+          "count": {
+            "type": "integer"
+          },
+          "tier": {
+            "type": "string"
+          }
+        }
+      },
+      "AlertCreate": {
+        "type": "object",
+        "required": [
+          "type",
+          "message",
+          "severity"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "inventory_low"
+          },
+          "message": {
+            "type": "string",
+            "example": "Product XYZ is running low on stock"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ],
+            "example": "high"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "Alert": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object"
+          },
+          "status": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "acknowledged": {
+            "type": "boolean"
+          },
+          "acknowledged_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AlertResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Alert"
+          }
+        }
+      },
+      "AlertListResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "alerts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Alert"
+                }
+              },
+              "total": {
+                "type": "integer"
+              },
+              "summary": {
+                "type": "object",
+                "properties": {
+                  "active": {
+                    "type": "integer"
+                  },
+                  "acknowledged": {
+                    "type": "integer"
+                  },
+                  "by_severity": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ABTestCreate": {
+        "type": "object",
+        "required": [
+          "name",
+          "variants"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Homepage Button Color Test"
+          },
+          "description": {
+            "type": "string"
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "weight": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            }
+          },
+          "target_metric": {
+            "type": "string"
+          }
+        }
+      },
+      "ABTest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "status": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ABTestResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ABTest"
+          }
+        }
+      },
+      "ABTestListResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ABTest"
+            }
+          }
+        }
+      },
+      "ABTestResultsResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "test": {
+                "$ref": "#/components/schemas/ABTest"
+              },
+              "results": {
+                "type": "object",
+                "properties": {
+                  "variants": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "statistical_significance": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "winner": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
